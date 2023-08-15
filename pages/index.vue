@@ -1,5 +1,3 @@
 <template>
-  <div class="p-5">
-    <h1>Home Dashboard</h1>
-  </div>
+  <h1>Home Dashboard</h1>
 </template>

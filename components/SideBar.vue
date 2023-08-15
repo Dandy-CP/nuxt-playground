@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ISession from "types/session.types";
+
 const route = useRoute();
 
 const menu = [
@@ -22,66 +24,63 @@ const menu = [
   },
 ];
 
-const handleLogOut = () => {
-  const token = useCookie("token");
+const handleLogOut = async () => {
+  const token = useCookie<ISession | null>("session");
   token.value = null;
-
-  return navigateTo("/login");
+  navigateTo("/login");
 };
 </script>
 
 <template>
-  <div class="h-screen bg-white">
-    <div class="flex flex-col gap-10 w-[250px] h-full p-7">
-      <img src="../public/LogoVertical.png" alt="" class="w-[145px] h-[48px]" />
+  <div class="flex flex-col gap-10 w-[250px] h-auto p-7 bg-white">
+    <img src="../assets/LogoVertical.png" alt="" class="w-[145px] h-[48px]" />
 
-      <div v-for="(item, index) in menu" :key="index">
-        <NuxtLink
-          :to="item.to"
-          class="flex flex-row items-center gap-5 cursor-pointer"
+    <div v-for="(item, index) in menu" :key="index">
+      <NuxtLink
+        :to="item.to"
+        class="flex flex-row items-center gap-5 cursor-pointer"
+      >
+        <UIcon
+          :name="item.icon"
+          class="w-[24px] h-[24px]"
+          :class="
+            route.fullPath === item.valuePath
+              ? 'text-[#1570EF]'
+              : 'text-[#5D6679]'
+          "
+        />
+
+        <p
+          class="text-[17px] font-medium"
+          :class="
+            route.fullPath === item.valuePath
+              ? 'text-[#1570EF]'
+              : 'text-[#5D6679]'
+          "
         >
-          <UIcon
-            :name="item.icon"
-            class="w-[24px] h-[24px]"
-            :class="
-              route.fullPath === item.valuePath
-                ? 'text-[#1570EF]'
-                : 'text-[#5D6679]'
-            "
-          />
+          {{ item.label }}
+        </p>
+      </NuxtLink>
+    </div>
 
-          <p
-            class="text-[17px] font-medium"
-            :class="
-              route.fullPath === item.valuePath
-                ? 'text-[#1570EF]'
-                : 'text-[#5D6679]'
-            "
-          >
-            {{ item.label }}
-          </p>
-        </NuxtLink>
+    <div class="flex flex-col gap-10 mt-auto">
+      <div class="flex flex-row items-center gap-5 cursor-pointer">
+        <UIcon
+          name="i-heroicons-cog-6-tooth"
+          class="w-[24px] h-[24px] text-[#5D6679]"
+        />
+        <p class="text-[17px] font-medium text-[#5D6679]">Setting</p>
       </div>
 
-      <div class="flex flex-col gap-10 mt-auto">
-        <div class="flex flex-row items-center gap-5 cursor-pointer">
-          <UIcon
-            name="i-heroicons-cog-6-tooth"
-            class="w-[24px] h-[24px] text-[#5D6679]"
-          />
-          <p class="text-[17px] font-medium text-[#5D6679]">Setting</p>
-        </div>
-
-        <div
-          class="flex flex-row items-center gap-5 cursor-pointer"
-          @click="handleLogOut()"
-        >
-          <UIcon
-            name="i-heroicons-arrow-right-on-rectangle"
-            class="w-[24px] h-[24px] text-[#5D6679]"
-          />
-          <p class="text-[17px] font-medium text-[#5D6679]">Log Out</p>
-        </div>
+      <div
+        class="flex flex-row items-center gap-5 cursor-pointer"
+        @click="handleLogOut()"
+      >
+        <UIcon
+          name="i-heroicons-arrow-right-on-rectangle"
+          class="w-[24px] h-[24px] text-[#5D6679]"
+        />
+        <p class="text-[17px] font-medium text-[#5D6679]">Log Out</p>
       </div>
     </div>
   </div>

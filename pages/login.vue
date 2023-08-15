@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { FormError } from "@nuxthq/ui/dist/runtime/types";
-
 const loadingSignIn = ref<boolean>(false);
 const formView = ref<string>("SignIn");
 const formState = ref<{ email: string; password: string }>({
@@ -9,7 +7,7 @@ const formState = ref<{ email: string; password: string }>({
 });
 const errorMessage = ref<string>("");
 
-const validate = (state: any): FormError[] => {
+const validate = (state: any) => {
   const errors = [];
   if (!state.email)
     errors.push({ path: "email", message: "Email Cannot Be Empty" });
@@ -21,13 +19,7 @@ const validate = (state: any): FormError[] => {
 async function HandleLogin() {
   loadingSignIn.value = true;
 
-  const {
-    data: responseData,
-    error,
-    status,
-  } = await useApi({
-    endpoint: "auth/login",
-    method: "POST",
+  const { error, status } = await useAuth({
     payload: {
       email: formState.value.email,
       password: formState.value.password,
@@ -35,8 +27,6 @@ async function HandleLogin() {
   });
 
   if (status.value !== "error") {
-    const logins = useCookie<string>("token");
-    logins.value = responseData.value?.access_token;
     loadingSignIn.value = false;
     navigateTo("/");
   } else {
@@ -60,11 +50,11 @@ definePageMeta({
 
 <template>
   <div class="h-screen w-screen flex flex-row justify-evenly items-center">
-    <img src="../public/Logo.png" alt="" draggable="false" />
+    <img src="../assets/Logo.png" alt="" draggable="false" />
 
     <div class="flex flex-col justify-center items-center">
       <img
-        src="../public/LogoOnly.png"
+        src="../assets/LogoOnly.png"
         alt=""
         draggable="false"
         class="w-[48px] h-[48px]"
@@ -95,31 +85,27 @@ definePageMeta({
             :loading="loadingSignIn"
           />
         </UFormGroup>
-
-        <p
-          class="text-right text-[14px] text-[#1366D9] font-medium mt-3 hover:cursor-pointer hover:underline"
-        >
-          Forgot Password ?
-        </p>
-
-        <p
-          v-if="errorMessage"
-          class="text-red-400 text-center font-medium mt-3"
-        >
-          {{ errorMessage }}
-        </p>
-
-        <UButton
-          @click="HandleLogin()"
-          class="mt-5 w-[150px] h-[46px] mr-auto ml-auto"
-          color="blue"
-          variant="solid"
-          :loading="loadingSignIn"
-          block
-        >
-          Sign In
-        </UButton>
       </UForm>
+
+      <p
+        class="ml-auto text-[14px] text-[#1366D9] font-medium mt-3 hover:cursor-pointer hover:underline"
+      >
+        Forgot Password ?
+      </p>
+
+      <p v-if="errorMessage" class="text-red-400 text-center font-medium mt-3">
+        {{ errorMessage }}
+      </p>
+
+      <UButton
+        @click="HandleLogin"
+        class="mt-5 w-[150px] h-[46px] mr-auto ml-auto"
+        color="blue"
+        variant="solid"
+        :loading="loadingSignIn"
+        label="Sign In"
+        block
+      />
 
       <div
         v-if="formView === 'SignIn'"

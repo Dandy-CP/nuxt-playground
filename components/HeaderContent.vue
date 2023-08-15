@@ -14,7 +14,7 @@
     <div class="flex flex-row items-center gap-5">
       <p class="text-[16px] font-medium">Dandy CP</p>
       <img
-        src="../public/avatar.jpg"
+        src="../assets/avatar.jpg"
         alt=""
         class="w-[40px] h-[40px] rounded-full"
       />
