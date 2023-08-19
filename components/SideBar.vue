@@ -32,7 +32,9 @@ const handleLogOut = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-10 w-[250px] h-auto p-7 bg-white">
+  <div
+    class="h-screen sticky top-0 flex flex-col gap-10 w-[250px] p-7 bg-white"
+  >
     <img src="../assets/LogoVertical.png" alt="" class="w-[145px] h-[48px]" />
 
     <div v-for="(item, index) in menu" :key="index">
