@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-row w-full h-auto">
+  <div class="flex flex-row w-full">
     <SideBar />
 
-    <div class="w-full h-auto bg-slate-100">
+    <div class="w-full bg-slate-100">
       <HeaderContent />
       <slot />
     </div>
