@@ -5,8 +5,9 @@ interface IOptions {
 }
 
 export default async function useAuth({ payload }: IOptions) {
+  const config = useRuntimeConfig();
   const { data, error, status, pending, refresh } = await useFetch<any>(
-    "https://fine-plum-python.cyclic.app/auth/login",
+    `${config.public.apiBase}/auth/login`,
     {
       method: "POST",
       body: {
