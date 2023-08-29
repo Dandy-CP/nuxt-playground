@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const route = useRoute();
 const {
   inputProductName,
   inputCategory,
@@ -15,6 +16,8 @@ const {
   handleAddProduct: () => void;
 }>();
 
+console.log(route.name);
+
 defineEmits([
   "update:inputProductName",
   "update:inputCategory",
@@ -26,9 +29,17 @@ defineEmits([
 
 <template>
   <UCard>
-    <h1 class="font-bold text-lg">Add New Products</h1>
+    <h1 class="font-bold text-xl text-center">
+      {{
+        route.name === "inventory-productID"
+          ? "Update Products"
+          : "Add New Products"
+      }}
+    </h1>
 
-    <div class="flex flex-col gap-7 mt-5">
+    <hr class="mt-3 mb-3" />
+
+    <div class="flex flex-col gap-7 mt-8">
       <div class="flex flex-row items-center justify-between">
         <p class="font-medium">Product Name</p>
         <div class="w-[273px]">
@@ -87,7 +98,11 @@ defineEmits([
     <div class="flex flex-col gap-5 mt-10">
       <UButton
         color="blue"
-        label="Add Product"
+        :label="
+          route.name === 'inventory-productID'
+            ? 'Update Product'
+            : 'Add Product'
+        "
         class="w-[116px] h-[40px]"
         @click="handleAddProduct()"
         :loading="isSendData"
