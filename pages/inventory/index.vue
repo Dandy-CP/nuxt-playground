@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type IResponseProducts from "types/responseProducts.types";
 import type IInputProduct from "../../types/inputProduct.types";
 
 const page = ref<number>(1);
@@ -6,6 +7,7 @@ const limit = ref<number>(10);
 const nameValue = ref<string>("");
 const modalState = ref<boolean>(false);
 const isSendData = ref<boolean>(false);
+const loadingState = ref<boolean>(false);
 const inputProducts = ref<IInputProduct>({
   productName: "",
   category: "",
@@ -15,7 +17,11 @@ const inputProducts = ref<IInputProduct>({
 const valueSearch = refDebounced(nameValue, 1000);
 const toast = useToast();
 
-const { data: productsData, refresh } = await useRequestGet({
+const {
+  data: productsData,
+  pending,
+  refresh,
+} = await useRequestApi.get<IResponseProducts>({
   endpoint: "products",
   query: {
     page: page,
@@ -41,7 +47,7 @@ const handleAddProduct = async () => {
 
   isSendData.value = true;
 
-  const { status, error } = await useRequestSend({
+  const { status, error } = await useRequestApi.request({
     endpoint: "products",
     method: "POST",
     payload: inputProducts.value,
@@ -71,7 +77,7 @@ const handleAddProduct = async () => {
 };
 
 const onNext = () => {
-  if (page.value + 1 <= productsData.value.meta.totalPages) {
+  if (page.value + 1 <= productsData?.value!.meta?.totalPages) {
     page.value = page.value + 1;
   }
 };
@@ -90,22 +96,36 @@ watch(modalState, (status) => {
     inputProducts.value.stock = 0;
   }
 });
+
+watch(pending, (status) => {
+  if (status) {
+    loadingState.value = true;
+  }
+
+  if (!status) {
+    loadingState.value = false;
+  }
+});
+
+useHead({
+  title: "Inventory",
+});
 </script>
 
 <template>
   <div class="p-5">
-    <InventoryOverall :totalProducts="productsData.meta.totalItems" />
+    <InventoryOverall :totalProducts="productsData!.meta.totalItems" />
 
     <InventoryTableProducts
-      :key="productsData.items || nameValue"
-      :rowsData="productsData.items"
+      :rowsData="productsData?.items"
       v-model:modalState="modalState"
       v-model:nameValue="nameValue"
-      :currentPage="productsData.meta.currentPage"
-      :totalPage="productsData.meta.totalPages"
+      :currentPage="productsData!.meta.currentPage"
+      :totalPage="productsData!.meta.totalPages"
       :onNext="onNext"
       :onPrev="onPrev"
       :refetch="refresh"
+      :loadingState="loadingState"
     />
 
     <UModal v-model="modalState">
