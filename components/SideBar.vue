@@ -22,6 +22,18 @@ const menu = [
     to: "/orders",
     valuePath: "/orders",
   },
+  {
+    label: "Users",
+    icon: "i-heroicons-users",
+    to: "/users",
+    valuePath: "/users",
+  },
+  {
+    label: "Transaction",
+    icon: "i-heroicons-banknotes",
+    to: "/transaction",
+    valuePath: "/transaction",
+  },
 ];
 
 const handleLogOut = async () => {
