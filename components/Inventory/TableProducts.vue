@@ -1,22 +1,31 @@
 <script setup lang="ts">
-import type IResponseProducts from "../../types/responseProducts.types";
+import type { IResponseItems } from "../../types/responseProducts.types";
 
 const toast = useToast();
-const { rowsData, nameValue, currentPage, totalPage, onNext, onPrev, refetch } =
-  defineProps<{
-    rowsData?: IResponseProducts[];
-    nameValue: string;
-    currentPage: number;
-    totalPage: number;
-    onNext: () => void;
-    onPrev: () => void;
-    refetch: () => void;
-  }>();
+const {
+  rowsData,
+  nameValue,
+  currentPage,
+  totalPage,
+  onNext,
+  onPrev,
+  refetch,
+  loadingState,
+} = defineProps<{
+  rowsData?: IResponseItems[];
+  nameValue: string;
+  currentPage: number;
+  totalPage: number;
+  onNext: () => void;
+  onPrev: () => void;
+  refetch: () => void;
+  loadingState: boolean;
+}>();
 
 defineEmits(["update:nameValue", "update:modalState"]);
 
 const handleDeleteProducts = async (id: string) => {
-  const { status, error } = await useRequestSend({
+  const { status, error } = await useRequestApi.request({
     endpoint: `products/${id}`,
     method: "DELETE",
   });
@@ -77,13 +86,6 @@ const itemsDropdown = (row: any) => [
   ],
   [
     {
-      label: "Edit",
-      icon: "i-heroicons-pencil-square-20-solid",
-      click: () => console.log(row.id),
-    },
-  ],
-  [
-    {
       label: "Delete",
       icon: "i-heroicons-trash-20-solid",
       click: () => handleDeleteProducts(row.id),
@@ -124,9 +126,14 @@ const itemsDropdown = (row: any) => [
       :rows="rowsData"
       :columns="columnsData"
       :sort="{ column: 'productName', direction: 'asc' }"
+      :loading="loadingState"
       @select=""
       class="mt-5 mb-10"
     >
+      <template #price-data="{ row }">
+        <p>Rp{{ row?.price?.toLocaleString() }}</p>
+      </template>
+
       <template #actions-data="{ row }">
         <UDropdown :items="itemsDropdown(row)">
           <UButton
