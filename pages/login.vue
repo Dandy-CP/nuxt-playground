@@ -16,7 +16,7 @@ const validate = (state: any) => {
   return errors;
 };
 
-async function HandleLogin() {
+const HandleLogin = async () => {
   loadingSignIn.value = true;
 
   const { error, status } = await useAuth({
@@ -33,15 +33,19 @@ async function HandleLogin() {
     errorMessage.value = error.value?.data?.message;
     loadingSignIn.value = false;
   }
-}
+};
 
-function changeView() {
+const changeView = () => {
   if (formView.value === "SignIn") {
     formView.value = "SignUp";
   } else if (formView.value === "SignUp") {
     formView.value = "SignIn";
   }
-}
+};
+
+useHead({
+  title: "Login",
+});
 
 definePageMeta({
   layout: "custom",
