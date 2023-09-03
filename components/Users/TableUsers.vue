@@ -35,7 +35,7 @@ const itemsDropdown = (row: any) => [
     {
       label: "Details",
       icon: "i-heroicons-eye-20-solid",
-      click: () => navigateTo(`/orders/${row.id}`),
+      click: () => navigateTo(`/users/${row.id}`),
     },
   ],
 ];
