@@ -78,13 +78,16 @@ const handleLogOut = async () => {
     </div>
 
     <div class="flex flex-col gap-10 mt-auto">
-      <div class="flex flex-row items-center gap-5 cursor-pointer">
+      <NuxtLink
+        to="/setting"
+        class="flex flex-row items-center gap-5 cursor-pointer"
+      >
         <UIcon
           name="i-heroicons-cog-6-tooth"
           class="w-[24px] h-[24px] text-[#5D6679]"
         />
         <p class="text-[17px] font-medium text-[#5D6679]">Setting</p>
-      </div>
+      </NuxtLink>
 
       <div
         class="flex flex-row items-center gap-5 cursor-pointer"
