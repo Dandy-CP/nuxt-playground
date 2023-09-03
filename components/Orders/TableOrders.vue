@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import type IResponseOrder from "types/responseOrders.type";
 
-const { ordersData, currentPage, totalPage, onNext, onPrev } = defineProps<{
-  ordersData: IResponseOrder;
-  currentPage: number;
-  totalPage: number;
-  onNext: () => void;
-  onPrev: () => void;
-}>();
+const { ordersData, currentPage, totalPage, loadingState, onNext, onPrev } =
+  defineProps<{
+    ordersData: IResponseOrder;
+    currentPage: number;
+    totalPage: number;
+    loadingState: boolean;
+    onNext: () => void;
+    onPrev: () => void;
+  }>();
 
 const columnsData = [
   {
@@ -85,7 +87,7 @@ const itemsDropdown = (row: any) => [
       :rows="ordersData.items"
       :columns="columnsData"
       :sort="{ column: 'buyerName', direction: 'asc' }"
-      :loading="false"
+      :loading="loadingState"
       @select=""
       class="mt-5 mb-10"
     >
@@ -139,14 +141,14 @@ const itemsDropdown = (row: any) => [
         icon="i-heroicons-arrow-small-left-20-solid"
         color="blue"
         variant="soft"
-        @click="onNext()"
+        @click="onPrev"
       />
       <p class="font-medium">{{ currentPage }} / {{ totalPage }}</p>
       <UButton
         icon="i-heroicons-arrow-small-right-20-solid"
         color="blue"
         variant="soft"
-        @click="onPrev()"
+        @click="onNext"
       />
     </div>
   </div>
