@@ -4,6 +4,7 @@ import type IResponseOrder from "types/responseOrders.type";
 const page = ref<number>(1);
 const limit = ref<number>(10);
 const valueSearch = ref<string>("");
+const loadingState = ref<boolean>(false);
 
 const {
   data: ordersData,
@@ -30,6 +31,16 @@ const onPrev = () => {
   }
 };
 
+watch(pending, (status) => {
+  if (status) {
+    loadingState.value = true;
+  }
+
+  if (!status) {
+    loadingState.value = false;
+  }
+});
+
 useHead({
   title: "Orders",
 });
@@ -43,6 +54,7 @@ useHead({
       :ordersData="(ordersData as IResponseOrder)"
       :currentPage="ordersData!.meta.currentPage"
       :totalPage="ordersData!.meta.totalPages"
+      :loadingState="loadingState"
       :onNext="onNext"
       :onPrev="onPrev"
     />
